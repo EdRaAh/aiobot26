@@ -11,12 +11,12 @@ alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 #инициаллизируем объекты бота и диспетчера
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
 users = {}
 
 #кол-во попыток в игре
-ATTEMPTS = 7g
+ATTEMPTS = 7
 
 dp.include_router(router)
 
