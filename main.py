@@ -1,7 +1,6 @@
 import logging
 import random
 from aiogram import Bot, Dispatcher
-from aiogram import Router
 from handlers import router
 from confa import TOKEN
 
@@ -12,12 +11,12 @@ alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 #инициаллизируем объекты бота и диспетчера
 bot = Bot(token=TOKEN)
-dp = Dispatcher()
+dp = Dispatcher(bot)
 
 users = {}
 
 #кол-во попыток в игре
-ATTEMPTS = 7
+ATTEMPTS = 7g
 
 dp.include_router(router)
 
