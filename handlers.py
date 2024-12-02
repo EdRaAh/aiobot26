@@ -9,7 +9,7 @@ router: Router = Router()
 async def start(message: Message):
     logger.info("User %s started the bot.", message.from_user.id)
     await message.answer(
-        'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help')
+    'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help')
 
     if message.from_user.id not in users:
         users[message.from_user.id] = {
