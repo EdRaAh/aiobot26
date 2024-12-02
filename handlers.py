@@ -1,5 +1,5 @@
 
-from main import logger, users, ATTEMPTS, get_random_letter, alphabet
+from confa import logger, users, ATTEMPTS, get_random_letter, alphabet
 from aiogram import Router
 
 from aiogram.filters import Command

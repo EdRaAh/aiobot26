@@ -1,31 +1,15 @@
 import logging
-import random
-from aiogram import Bot, Dispatcher
-from handlers import router
+from aiogram import Bot, Dispatcher, Router
 from confa import TOKEN
-
+router: Router = Router()
+from handlers import router
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-alphabet = 'abcdefghijklmnopqrstuvwxyz'
+logger = logging.getLogger(__file__)
 
 #инициаллизируем объекты бота и диспетчера
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-
-users = {}
-
-#кол-во попыток в игре
-ATTEMPTS = 7
-
 dp.include_router(router)
-
-# Функция генерирует случайную букву от a-z
-def get_random_letter() -> str:
-    return chr(random.randint(ord('a'), ord('z')))
-
-
-
 
 # Основной блок запуска бота
 if __name__ == "__main__":
