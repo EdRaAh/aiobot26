@@ -1,7 +1,8 @@
 import random
 import logging
+from aiogram import Bot
 TOKEN="7575340257:AAGtsdY_G6KXFv8aDMC4Vse3Zqinf84_5sI"
-
+bot = Bot(token=TOKEN)
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 logger = logging.getLogger(__file__)
