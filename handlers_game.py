@@ -7,36 +7,15 @@ from aiogram.types import Message, InputFile
 router: Router = Router()
 
 
-images_folder: str = 'cats'  # путь к папке с фото
-
-
-if not os.path.exists(images_folder) or not os.listdir(images_folder):
-    raise FileNotFoundError(f"The folder '{images_folder}' does not exist or is empty.")
-images = os.listdir(images_folder)
-
-async def send_image(chat_id:int, caption:str):
-    try:
-        random_image = random.choice(images)
-        image_path = os.path.join(images_folder, random_image) #полный путь
-        photo = InputFile(file = image_path)
-        #with open(image_path, 'rb') as photo:
-        await bot.send_photo(chat_id, photo=photo, caption=caption)
-
-    except Exception as e:
-        logger.error('Failed to send photo: %s', str(e))
 
 @router.message(Command(commands=['start', 'START']))
 async def start(message: Message):
     logger.info("User %s started the bot.", message.from_user.id)
-<<<<<<<<< Temporary merge branch 1
     await message.answer(
     'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help')
-
-=========
     chat_id = message.chat.id
     response_text = 'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help'
     await message.send_image(chat_id, response_text)
->>>>>>>>> Temporary merge branch 2
     if message.from_user.id not in users:
         users[message.from_user.id] = {
             'in_game': False,

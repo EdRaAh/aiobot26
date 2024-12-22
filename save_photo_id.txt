@@ -1,0 +1,19 @@
+import  asyncio
+from h_extract_ids import photo_ids
+async def write_ids_to_file(photo_ids):
+    try:
+        with open('list_ids.py') as file:
+            content = file.read()
+            exec(content)
+    except FileExistsError:
+        photos_ids = []
+    # добавляем новые id в список photos_ids
+    for id in photo_ids:
+        if id not in photos_ids:
+            photos_ids.append(id)
+    with open('list_ids.py','w') as file:
+        file.write(f'photos_ids = {photos_ids}')
+async def main():
+    await write_ids_to_file(photo_ids)
+  # asyncio.run(main())
+
