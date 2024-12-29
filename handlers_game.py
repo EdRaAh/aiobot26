@@ -1,69 +1,15 @@
-import os
+
 import random
-from confa import logger, users, ATTEMPTS, get_random_letter, alphabet, bot
+import logging
+from config import users, ATTEMPTS, alphabet
 from aiogram import Router
-from aiogram.filters import Command
-from aiogram.types import Message, InputFile
+from aiogram.types import Message
+
 router: Router = Router()
+logger = logging.getLogger(__file__)
 
-
-
-@router.message(Command(commands=['start', 'START']))
-async def start(message: Message):
-    logger.info("User %s started the bot.", message.from_user.id)
-    await message.answer(
-    'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help')
-    chat_id = message.chat.id
-    response_text = 'I am online! Я в сети!\n Чтобы сыграть в игру напиши "играть"\nУзнать правила отправь команду /help'
-    await message.send_image(chat_id, response_text)
-    if message.from_user.id not in users:
-        users[message.from_user.id] = {
-            'in_game': False,
-            'secret_letter': None,
-            'attempts': None,
-            'total_games': 0,
-            'wins': 0
-        }
-
-
-@router.message(Command(commands='help'))
-async def process_help_command(message: Message):
-    await message.answer(
-        f'Правила игры:\n\n'
-        f'Я загадываю букву от A-Z, а вам нужно её угадать(отправлять в любом регистре).\n'
-        f' Это полезная игра научит вас английскому алфавиту, и не только.\n'
-        f'У вас есть {ATTEMPTS} попыток\n\n'
-        f'Доступные команды:\n'
-        f'/help - правила игры и список команд\n'
-        f'/cancel - выйти из игры\n'
-        f'/stat - посмотреть статистику\n\n'
-        f'Давай сыграем?'
-    )
-
-
-# Этот хендлер будет срабатывать на команду "/stat"
-@router.message(Command(commands='stat'))
-async def process_stat_command(message: Message):
-    await message.answer(f'Всего игр сыграно: {users[message.from_user.id]["total_games"]}\n'
-                         f'Игр выиграно: {users[message.from_user.id]["wins"]}'
-                         )
-
-
-# Этот хендлер будет срабатывать на команду "/cancel"
-@router.message(Command(commands='cancel'))
-async def process_cancel_command(message: Message):
-    logger.info("User %s tried to cancel the game.", message.from_user.id)
-    if users[message.from_user.id]['in_game']:
-        users[message.from_user.id]['in_game'] = False
-        await message.answer(
-            'Вы вышли из игры. Если захотите сыграть снова - напишите об этом'
-        )
-    else:
-        await message.answer(
-            'А мы и так с вами не играем. Может, сыграем разок?'
-        )
-
-
+def get_random_letter() -> str:
+    return chr(random.randint(ord('a'), ord('z')))
 # Этот хендлер будет срабатывать на согласие пользователя сыграть в игру
 @router.message(lambda x: x.text.lower() in ['да', 'давай', 'yes', 'играть', 'ok', 'хорошо'])
 async def process_positive_answer(message: Message):
@@ -73,7 +19,6 @@ async def process_positive_answer(message: Message):
         users[message.from_user.id]['secret_letter'] = get_random_letter()
         users[message.from_user.id]['attempts'] = ATTEMPTS
         await message.answer('Ура!\n\nЯ загадал букву, попробуйте угадать ее в этом ряду -ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-        #await send_image(message.chat.id, response_text)
     else:
         await message.answer(
             'Пока мы играем в игру я могу реагировать на команды /cancel и /stat'
@@ -95,7 +40,7 @@ async def process_negative_answer(message: Message):
 
 
 # Этот хендлер будет срабатывать на отправку пользователем буквы от a-z
-@router.message(lambda x: x.text and any('A' <= char <= 'Z' or 'a' <= char <= 'z' for char in x.text))
+@router.message(lambda x: len(x.text) == 1 and any('A' <= char <= 'Z' or 'a' <= char <= 'z' for char in x.text))
 async def process_letter_answer(message: Message):
     logger.info("User %s sent a letter: %s", message.from_user.id, message.text)
     guess = message.text.strip().lower()

@@ -1,13 +1,13 @@
 import logging
 
 from aiogram import Dispatcher, Router
-from confa import bot
+from config import bot
 router: Router = Router()
 
-from handlers_comand import router as router_2
-from handlers_game import router as router_3
-from h_extract_ids import router as router_1
-from h_random_photo import router as router_4
+from handlers_comand import router as router_1
+from handlers_game import router as router_2
+from h_random_photo import router as router_3
+from h_extract_ids import router as router_4
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__file__)

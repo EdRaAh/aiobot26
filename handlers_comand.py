@@ -1,9 +1,12 @@
-from confa import logger, users, ATTEMPTS
+import logging
+from config import users, ATTEMPTS
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
+logger = logging.getLogger(__file__)
 router: Router = Router()
+
 # этот хендлер будет срабатывать на команду "/start" в любом регистре
 @router.message(Command(commands=['start', 'START']))
 async def start(message: Message):

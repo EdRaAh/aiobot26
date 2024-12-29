@@ -3,7 +3,7 @@ import json
 import os
 from aiogram.types import Message
 from aiogram import Router, F
-from confa import logger
+from config import logger
 
 router: Router = Router()
 
@@ -13,8 +13,6 @@ async def handler_photo(message: Message):
     logger.info(f"получено фото: {message.photo[-1].file_id}")
     photo_ids.append(message.photo[-1].file_id)
     await write_ids_to_file(photo_ids)  # Сохраняем ID сразу после добавления
-
-print(f'1 из папки h_extract_ids:/n {photo_ids}')
 
 async def write_ids_to_file(photos_ids):
         # Проверяем, существует ли файл
@@ -36,7 +34,7 @@ async def write_ids_to_file(photos_ids):
     with open('list_ids.json', 'w') as file:
         json.dump(photos_ids, file, indent=4)
 
-print(f'2 из папки h_extract_ids:/n {photo_ids}')
+
 async def main():
             # Пишем ID в файл
     await write_ids_to_file(photo_ids)
