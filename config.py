@@ -1,7 +1,5 @@
 import os
-import random
 import logging
-
 from aiogram import Bot
 
 from dotenv import load_dotenv

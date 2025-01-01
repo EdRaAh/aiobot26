@@ -1,4 +1,4 @@
-import asyncio
+
 import json
 import os
 from aiogram.types import Message

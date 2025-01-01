@@ -9,9 +9,9 @@ logger = logging.getLogger(__file__)
 router: Router = Router()
 
 @router.message(lambda x: x.text.lower() in ['хочу фото', 'want photo','send photo'])
-async def send_photo_handler(message:Message):
+async def send_photo_handler(message:Message, caption:str):
     logger.info(f"получена команда /send_photo от пользователя {message.from_user.id}")
-    folder_path = 'cats'  # path to cats
+    folder_path = 'cats'
     try:
         photos = os.listdir(folder_path)
 
@@ -21,7 +21,7 @@ async def send_photo_handler(message:Message):
         random_photo = random.choice(photos)
         photo_path = os.path.join(folder_path, random_photo)
         photo = FSInputFile(photo_path)
-        await message.answer_photo(photo=photo)
+        await message.answer_photo(photo=photo, caption=caption)
     except FileNotFoundError:
         await message.answer("папка с фото не найдена")
     except Exception as e:

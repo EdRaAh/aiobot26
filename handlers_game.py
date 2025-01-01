@@ -4,7 +4,7 @@ import logging
 from config import users, ATTEMPTS, alphabet
 from aiogram import Router
 from aiogram.types import Message
-
+from h_random_photo import send_photo_handler
 router: Router = Router()
 logger = logging.getLogger(__file__)
 
@@ -23,8 +23,6 @@ async def process_positive_answer(message: Message):
         await message.answer(
             'Пока мы играем в игру я могу реагировать на команды /cancel и /stat'
         )
-
-
 # Этот хендлер будет срабатывать на отказ пользователя сыграть в игру
 @router.message(lambda x: x.text.lower() in ['нет', 'no', 'не хочу', 'не буду'])
 async def process_negative_answer(message: Message):
@@ -37,14 +35,12 @@ async def process_negative_answer(message: Message):
         await message.answer(
             'Мы же сейчас с вами играем. Присылайте, пожалуйста, англ. букву'
         )
-
-
 # Этот хендлер будет срабатывать на отправку пользователем буквы от a-z
 @router.message(lambda x: len(x.text) == 1 and any('A' <= char <= 'Z' or 'a' <= char <= 'z' for char in x.text))
 async def process_letter_answer(message: Message):
     logger.info("User %s sent a letter: %s", message.from_user.id, message.text)
     guess = message.text.strip().lower()
-
+# этот блок срабатывает если игрок выйграл
     if users[message.from_user.id]['in_game']:
         if guess == users[message.from_user.id]['secret_letter']:
             users[message.from_user.id]['in_game'] = False
@@ -55,7 +51,7 @@ async def process_letter_answer(message: Message):
                 'Хотите еще раз? Do you want to do it again?'
                 'Если нет, пишите "нет" If not, write "no"'
             )
-
+            await send_photo_handler(message,"ты выйграл котика! :)")
         else:
             users[message.from_user.id]['attempts'] -= 1
 
